@@ -8,12 +8,11 @@ namespace Reservoom.Models
 {
     public class Reservation
     {
+        public string Username { get; }
         public RoomID RoomID { get; }
         public DateTime StartDate { get; }
         public DateTime EndDate { get; }
         public TimeSpan Length => EndDate - StartDate;
-
-        public string Username { get; }
 
         public Reservation(RoomID roomID, DateTime startDate, DateTime endDate, string userName)
         {
