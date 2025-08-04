@@ -31,12 +31,6 @@ namespace Reservoom
                     "Thiago"
                 ));
 
-                hotel.MakeReservation(new Reservation(
-                    new RoomID(1, 5),
-                    new DateTime(2023, 10, 1),
-                    new DateTime(2023, 10, 5),
-                    "Thiago"
-                ));
             }
             catch (ReservationConflictException ex)
             {
