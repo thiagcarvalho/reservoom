@@ -15,6 +15,7 @@ namespace Reservoom.DTOs
         public int RoomNumber { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string Username { get; set; } = string.Empty;
 
     }
 }

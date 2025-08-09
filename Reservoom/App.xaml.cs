@@ -3,6 +3,9 @@ using Microsoft.Extensions.Options;
 using Reservoom.DbContexts;
 using Reservoom.Exceptions;
 using Reservoom.Models;
+using Reservoom.Services.ReservationConflictValidators;
+using Reservoom.Services.ReservationProviders;
+using Reservoom.Services.ReservationsCreators;
 using Reservoom.Stores;
 using Reservoom.ViewModel;
 using System.Configuration;
@@ -19,18 +22,26 @@ namespace Reservoom
         private const string CONNECTION_STRING = "Data Source=reservoom.db";
         private readonly Hotel _hotel;
         private readonly NavigationStore _navigationStore;
+        private ReservoomDbContextFactory _reservoomDbContextFactory;
 
         public App()
         {
-            _hotel = new Hotel("Copacabana Palace");
+            _reservoomDbContextFactory = new ReservoomDbContextFactory(CONNECTION_STRING);
+            Services.ReservationProviders.IReservationProvider reservationProvider = new DataBaseReservationProvider(_reservoomDbContextFactory);
+            Services.ReservationsCreators.IReservationCreator reservationCreator = new DatabaseReservationCreator(_reservoomDbContextFactory);
+            Services.ReservationConflictValidators.IReservationConflictValidator reservationConflictValidator = new DatabaseReservationConflictValidator(_reservoomDbContextFactory);
+
+            _hotel = new Hotel("Copacabana Palace", new ReservationBook(reservationProvider, reservationCreator, reservationConflictValidator));
             _navigationStore = new NavigationStore();
         }
         protected override void OnStartup(StartupEventArgs e)
         {
             DbContextOptions options = new DbContextOptionsBuilder().UseSqlite(CONNECTION_STRING).Options;
-            ReservoomDbContext dbContext = new ReservoomDbContext(options);
+            using (ReservoomDbContext dbContext = _reservoomDbContextFactory.CreateDbContext())
+            {
+                dbContext.Database.Migrate();
+            };
 
-            dbContext.Database.Migrate();
 
             _navigationStore.CurrentViewModel = CreateReservationListingViewModel();
 
@@ -51,7 +62,7 @@ namespace Reservoom
 
         private ReservationListingViewModel CreateReservationListingViewModel()
         {
-            return new ReservationListingViewModel(_hotel, new Services.NavigationService(_navigationStore, CreateMakeReservationViewModel));
+            return ReservationListingViewModel.LoadViewModel(_hotel, new Services.NavigationService(_navigationStore, CreateMakeReservationViewModel));
         }
     }
 
