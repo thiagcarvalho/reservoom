@@ -19,9 +19,9 @@ namespace Reservoom.ViewModel
         private DateTime _startDate = new DateTime(2025, 08, 04);
         private DateTime _endDate = new DateTime(2025, 08, 08);
 
-        public MakeReservationViewModel(Hotel hotel, NavigationService reservationViewNavigationService)
+        public MakeReservationViewModel(HotelStore hotelStore, NavigationService reservationViewNavigationService)
         {
-            SubmitCommand = new MakeReservationCommand(this, hotel, reservationViewNavigationService);
+            SubmitCommand = new MakeReservationCommand(this, hotelStore, reservationViewNavigationService);
             CancelCommand = new NavigateCommand(reservationViewNavigationService);
         }
 

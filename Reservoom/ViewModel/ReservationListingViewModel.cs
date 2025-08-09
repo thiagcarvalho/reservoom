@@ -22,17 +22,17 @@ namespace Reservoom.ViewModel
         public ICommand LoadReservationsCommand { get; }
         public ICommand MakeReservationCommand { get; }
 
-        public ReservationListingViewModel(Hotel hotel, NavigationService makeReservationNavigationService)
+        public ReservationListingViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService)
         {
             _reservations = new ObservableCollection<ReservationViewModel>();
             MakeReservationCommand = new NavigateCommand(makeReservationNavigationService);
-            LoadReservationsCommand = new LoadReservationsCommand(hotel, this);
+            LoadReservationsCommand = new LoadReservationsCommand(hotelStore, this);
 
         }
 
-        public static ReservationListingViewModel LoadViewModel(Hotel hotel, NavigationService makeReservationNavigationService)
+        public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService)
         {
-            ReservationListingViewModel viewModel = new ReservationListingViewModel(hotel, makeReservationNavigationService);
+            ReservationListingViewModel viewModel = new ReservationListingViewModel(hotelStore, makeReservationNavigationService);
             viewModel.LoadReservationsCommand.Execute(null);
             return viewModel;
         }

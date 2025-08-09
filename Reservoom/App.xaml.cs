@@ -21,6 +21,7 @@ namespace Reservoom
     {
         private const string CONNECTION_STRING = "Data Source=reservoom.db";
         private readonly Hotel _hotel;
+        private readonly HotelStore _hotelStore;
         private readonly NavigationStore _navigationStore;
         private ReservoomDbContextFactory _reservoomDbContextFactory;
 
@@ -32,6 +33,7 @@ namespace Reservoom
             Services.ReservationConflictValidators.IReservationConflictValidator reservationConflictValidator = new DatabaseReservationConflictValidator(_reservoomDbContextFactory);
 
             _hotel = new Hotel("Copacabana Palace", new ReservationBook(reservationProvider, reservationCreator, reservationConflictValidator));
+            _hotelStore = new HotelStore(_hotel);
             _navigationStore = new NavigationStore();
         }
         protected override void OnStartup(StartupEventArgs e)
@@ -57,12 +59,12 @@ namespace Reservoom
 
         private MakeReservationViewModel CreateMakeReservationViewModel()
         {
-            return new MakeReservationViewModel(_hotel, new Services.NavigationService(_navigationStore, CreateReservationListingViewModel));
+            return new MakeReservationViewModel(_hotelStore, new Services.NavigationService(_navigationStore, CreateReservationListingViewModel));
         }
 
         private ReservationListingViewModel CreateReservationListingViewModel()
         {
-            return ReservationListingViewModel.LoadViewModel(_hotel, new Services.NavigationService(_navigationStore, CreateMakeReservationViewModel));
+            return ReservationListingViewModel.LoadViewModel(_hotelStore, new Services.NavigationService(_navigationStore, CreateMakeReservationViewModel));
         }
     }
 
