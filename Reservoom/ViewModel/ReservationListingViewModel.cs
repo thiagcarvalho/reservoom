@@ -30,6 +30,15 @@ namespace Reservoom.ViewModel
 
         }
 
+        public override void Dispose()
+        {
+            base.Dispose();
+            foreach (var reservation in _reservations)
+            {
+                reservation.Dispose();
+            }
+        }
+
         public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService)
         {
             ReservationListingViewModel viewModel = new ReservationListingViewModel(hotelStore, makeReservationNavigationService);

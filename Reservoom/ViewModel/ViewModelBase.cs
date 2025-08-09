@@ -18,5 +18,11 @@ namespace Reservoom.ViewModel
             //PropertyName tells the UI which property has changed.
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public virtual void Dispose()
+        {
+
+        }
+
     }
 }
