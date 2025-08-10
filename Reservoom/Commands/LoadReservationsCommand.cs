@@ -23,6 +23,8 @@ namespace Reservoom.Commands
 
         public override async Task ExecuteAsync(object parameter)
         {
+            _reservationListingViewModel.IsLoading = true;
+
             try
             {
                 await _hotelStore.Load();
@@ -33,6 +35,8 @@ namespace Reservoom.Commands
             {
                 MessageBox.Show($"Failed to load reservation", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            _reservationListingViewModel.IsLoading = false;
         }
     }
 }

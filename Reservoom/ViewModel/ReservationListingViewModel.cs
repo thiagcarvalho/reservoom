@@ -22,6 +22,8 @@ namespace Reservoom.ViewModel
         public ICommand LoadReservationsCommand { get; }
         public ICommand MakeReservationCommand { get; }
 
+        private bool _isLoading;
+
         public ReservationListingViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService)
         {
             _reservations = new ObservableCollection<ReservationViewModel>();
@@ -46,6 +48,18 @@ namespace Reservoom.ViewModel
             return viewModel;
         }
 
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    OnPropertyChanged(nameof(IsLoading));
+                }
+            }
+        }
 
         public void UpdateReservation(IEnumerable<Reservation> reservations)
         {
