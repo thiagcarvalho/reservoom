@@ -24,6 +24,8 @@ namespace Reservoom.ViewModel
 
         private bool _isLoading;
 
+        private string _errorMessage;
+
         public ReservationListingViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService)
         {
             _reservations = new ObservableCollection<ReservationViewModel>();
@@ -58,6 +60,20 @@ namespace Reservoom.ViewModel
                     _isLoading = value;
                     OnPropertyChanged(nameof(IsLoading));
                 }
+            }
+        }
+
+        public bool HasErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
+
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set
+            {
+                _errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
+
+                OnPropertyChanged(nameof(HasErrorMessage));
             }
         }
 
